@@ -1,0 +1,31 @@
+#student-score-container span:first-child {
+  flex-grow: 1;  
+}
+
+
+#student-score-container .col-12 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#student-score-container .col-12:nth-child(2n+1) {
+  background-color: lightgray;
+}
+
+#student-score-container .col-12:first-child {
+  background-color: antiquewhite;
+}
+
+#student-score-container span:not(:first-child) {
+  width: 75px;
+}
+
+#student-score-container span {
+  display: block;
+  text-align: center; 
+  line-height: 31px;
+}
+
+.bb {
+  border-bottom: 1px solid grey;
+}
