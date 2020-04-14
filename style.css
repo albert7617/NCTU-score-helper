@@ -29,3 +29,7 @@
 .bb {
   border-bottom: 1px solid grey;
 }
+
+textarea {
+  height: 60vh;
+}
