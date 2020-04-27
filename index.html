@@ -9,6 +9,7 @@
   <script src="bootstrap.min.js"></script>
 </head>
 <body>
+  <audio id="alert-sfx" src="AchievementNotifyPopup.mp3" preload="auto" style="display: none;"></audio>
   <h1 class="text-center my-3">交大成績輸入小幫手</h1>
   <h3 class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-id-modal">載入學號</button></h3>
   <div class="container">
@@ -38,7 +39,7 @@
         <span>學號</span><span>成績</span><span>功能</span>
       </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3 my-5">
       <div class="col-12">
         <button type="button" class="btn btn-primary btn-block" onclick="exportCSV()">輸出CSV</button>
       </div>

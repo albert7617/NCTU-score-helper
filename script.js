@@ -19,7 +19,19 @@ $(document).ready(function() {
       score.focus(); 
       return false;
     } else if (event.keyCode == 109) {
-      $($('.student-score-cell')[0]).remove();
+      if ($('#alert-if-not-exist').prop('checked')) {
+        var node = $('#student-score-container').find('div[data-id="'+$('.latest').data('prev')+'"]');
+        $('.latest').removeData('prev');
+        $('.latest').removeAttr('data-prev');
+        $('.latest').data('score', '');
+        $('.latest').find('.score').html('');
+        $('.latest').removeClass('latest');
+        node.addClass('latest');
+      } else {
+        var node = $('#student-score-container').find('div[data-id="'+$('.latest').data('prev')+'"]');
+        $('.latest').remove();
+        node.addClass('latest');
+      }
       return false;
     }
   });
@@ -34,7 +46,20 @@ $(document).ready(function() {
       score.focus(); 
       return false;
     } else if (event.keyCode == 109) {
-      $($('.student-score-cell')[0]).remove();
+      if ($('#alert-if-not-exist').prop('checked')) {
+        var node = $('#student-score-container').find('div[data-id="'+$('.latest').data('prev')+'"]');
+        $('.latest').removeData('prev');
+        $('.latest').removeAttr('data-prev');
+        $('.latest').data('score', '');
+        $('.latest').find('.score').html('');
+        $('.latest').removeClass('latest');
+        node.addClass('latest');
+      } else {
+        var node = $('#student-score-container').find('div[data-id="'+$('.latest').data('prev')+'"]');
+        $('.latest').remove();
+        node.addClass('latest');
+      }
+      
       return false;
     }
   });
@@ -52,16 +77,26 @@ $(document).ready(function() {
             } else {
               scoreVal = parseInt(score.val(), 10);
             }
-            updateRow(student.val(), scoreVal);
-            student.val('');
-            score.val('');
-            student.focus();
+            if ($('#s-'+student.val()).data('score') == null || $('#s-'+student.val()).data('score') == '') {
+              updateRow(student.val(), scoreVal);
+              student.val('');
+              score.val('');
+              student.focus();
+            } else {
+              $('#alert-sfx')[0].play();
+              if (confirm('學號已存在，更新既有成績?')) {
+                updateRow(student.val(), scoreVal);
+                student.val('');
+                score.val('');
+                student.focus();
+              }
+            }
           } else {
-            alert('學號已存在!');
+            errorMsg('學號已存在!');
           }
         } else {
           if (studentIdLoaded) {
-            alert('學號不存在!');
+            errorMsg('學號不存在!');
           } else {
             if ($(this).val() == '00') {
               scoreVal = 100;
@@ -79,16 +114,26 @@ $(document).ready(function() {
     if (event.keyCode == 13) {
       if (studentIdLoaded) {
         if ($('#s-'+student.val()).length != 0) {
-          updateRow(student.val(), scoreVal);
-          student.val('');
-          score.val('');
-          student.focus();
+          if ($('#s-'+student.val()).data('score') == null || $('#s-'+student.val()).data('score') == '') {
+            updateRow(student.val(), scoreVal);
+            student.val('');
+            score.val('');
+            student.focus();
+          } else {
+            $('#alert-sfx')[0].play();
+            if (confirm('學號已存在，更新既有成績?')) {
+              updateRow(student.val(), scoreVal);
+              student.val('');
+              score.val('');
+              student.focus();
+            }
+          }
         } else {
-          alert('學號不存在!');
+          errorMsg('學號不存在!')
         }
       } else {
         if ($('#s-'+student.val()).length != 0) {
-          alert('學號已存在!');
+          errorMsg('學號已存在!')
         } else {
           insertRow(student.val(), scoreVal);
           student.val('');
@@ -102,32 +147,55 @@ $(document).ready(function() {
 });
 
 function insertRow(student, score='') {
+  var prev = $('.latest').data('id');
+  $('.latest').removeClass('latest');
   var node = 
-    `<div class="col-12 d-flex justify-content-around text-center student-score-cell" id="s-${student}" data-id="${student}" data-score="${score}">
+    `<div class="col-12 d-flex justify-content-around text-center student-score-cell latest" id="s-${student}" data-id="${student}" data-score="${score}" data-prev="${prev}">
       <span>${student}</span><span class="score">${score}</span><span><button type="button" class="btn btn-danger btn-sm" onclick="$('#s-${student}').remove()">刪除</button></span>
     </div>`;
   $(node).insertAfter('#student-score-container .student-score-header');
 }
 
 function updateRow(student, score) {
+  var prev = $('.latest').data('id');
+  $('.latest').removeClass('latest');
   var node = $('#s-'+student);
   node.data('score', score);
+  node.data('prev', prev);
+  node.addClass('latest');
   node.find('.score').html(score);
 }
 
 function exportCSV() {
   var rows = [];
   $('#student-score-container .student-score-cell').each(function(index, val) {
-    rows.push([$(val).data('id'), $(val).data('score')]);
+    // console.log([$(val).data('id'), checkEmpty($(val).data('score'))]);
+    rows.push([$(val).data('id'), checkEmpty($(val).data('score'))]);
   });
-  let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
-  var encodedUri = encodeURI(csvContent);
-  var link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "student-score.csv");
-  document.body.appendChild(link); // Required for FF
+  let csvContent = rows.map(e => e.join(",")).join("\n");
+  var csvFile = new Blob([csvContent], {type:"text/csv"});
+  var downloadLink = document.createElement("a");
+  downloadLink.download = "student-score.csv";
+  downloadLink.href = window.URL.createObjectURL(csvFile);
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  // var encodedUri = encodeURI(csvContent);
+  // console.log(encodedUri)
+  // var link = document.createElement("a");
+  // link.setAttribute("href", encodedUri);
+  // link.setAttribute("download", "student-score.csv");
+  // document.body.appendChild(link); // Required for FF
 
-  link.click(); // This will download the data file named "my_data.csv".
+  // link.click(); // This will download the data file named "my_data.csv".
+}
+
+function checkEmpty(val) {
+  if (val == null || val == '') {
+    return '#N/A';
+  } else {
+    return val;
+  }
 }
 
 function loadStudentId() {
@@ -141,6 +209,18 @@ function loadStudentId() {
       break;
   }
   student_id.forEach(element => insertRow(element.trim()));
+  $('.latest').removeClass('latest');
+  $('#student-score-container>div').each(function(index, el) {
+    $(el).data('prev', '');
+    $(el).removeAttr('data-prev');
+  });
   $('#alert-if-not-exist').prop('checked', true);
   $('#student-id-modal').modal('toggle');
+}
+
+function errorMsg(msg) {
+  $('#student-id').val('');
+  $('#student-id').focus();
+  $('#alert-sfx')[0].play();
+  alert(msg);
 }
