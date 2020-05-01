@@ -10,16 +10,17 @@
 </head>
 <body>
   <audio id="alert-sfx" src="AchievementNotifyPopup.mp3" preload="auto" style="display: none;"></audio>
-  <h1 class="text-center my-3">交大成績輸入小幫手</h1>
+  <h2 class="text-center my-3">交大成績輸入小幫手</h1>
   <h3 class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-id-modal">載入學號</button></h3>
   <div class="container">
     <div class="form-row">
-      <div class="col-12">
-        / : 清除學號輸入, * : 清除分數輸入, - : 刪除上一筆資料
-      </div>
+      <div class="col-12 col-md-3">/ : 清除學號輸入</div>
+      <div class="col-12 col-md-3">* : 清除分數輸入</div>
+      <div class="col-12 col-md-3">- : 刪除上一筆資料</div>
+      <div class="col-12 col-md-3">個位數分數補零</div>
       <div class="col-12 text-right">
         <input type="checkbox" class="ml-3" id="max-score-100" checked>
-        <label for="max-score-100">滿分100分(輸入00自動儲存100, 0分輸入0+enter)</label>
+        <label for="max-score-100" class="mb-0">滿分100分<span style="color: gray;">(輸入00自動儲存100, 0分輸入0+enter)</span></label>
       </div>
       <div class="col-12 text-right">
         <input type="checkbox" class="ml-3" id="alert-if-not-exist">
