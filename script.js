@@ -112,6 +112,7 @@ $(document).ready(function() {
       }
     }
     if (event.keyCode == 13) {
+      scoreVal = parseInt(score.val(), 10);
       if (studentIdLoaded) {
         if ($('#s-'+student.val()).length != 0) {
           if ($('#s-'+student.val()).data('score') == null || $('#s-'+student.val()).data('score') == '') {
