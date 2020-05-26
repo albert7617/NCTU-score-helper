@@ -169,9 +169,10 @@ function updateRow(student, score) {
 
 function exportCSV() {
   var rows = [];
-  $('#student-score-container .student-score-cell').each(function(index, val) {
+  $('#student-score-container .student-score-cell').toArray().reverse().forEach(function(el) {
+    
     // console.log([$(val).data('id'), checkEmpty($(val).data('score'))]);
-    rows.push([$(val).data('id'), checkEmpty($(val).data('score'))]);
+    rows.push([`"${$(el).data('id')}"`, checkEmpty($(el).data('score'))]);
   });
   let csvContent = rows.map(e => e.join(",")).join("\n");
   var csvFile = new Blob([csvContent], {type:"text/csv"});
