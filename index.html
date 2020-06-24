@@ -14,10 +14,11 @@
   <h3 class="text-center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-id-modal">載入學號</button></h3>
   <div class="container">
     <div class="form-row">
-      <div class="col-12 col-md-3">/ : 清除學號輸入</div>
-      <div class="col-12 col-md-3">* : 清除分數輸入</div>
-      <div class="col-12 col-md-3">- : 刪除上一筆資料</div>
-      <div class="col-12 col-md-3">個位數分數補零</div>
+      <div class="col-12 col-sm-6 col-md-3">/ : 清除學號輸入</div>
+      <div class="col-12 col-sm-6 col-md-3">* : 清除分數輸入</div>
+      <div class="col-12 col-sm-6 col-md-3">- : 刪除上一筆資料</div>
+      <div class="col-12 col-sm-6 col-md-3">+ : 切換滿分100分</div>
+      <div class="col-12 text-right">個位數分數補零+Enter</div>
       <div class="col-12 text-right">
         <input type="checkbox" class="ml-3" id="max-score-100" checked>
         <label for="max-score-100" class="mb-0">滿分100分<span style="color: gray;">(輸入00自動儲存100, 0分輸入0+enter)</span></label>
@@ -25,6 +26,12 @@
       <div class="col-12 text-right">
         <input type="checkbox" class="ml-3" id="alert-if-not-exist">
         <label for="alert-if-not-exist">已載入學號(提示輸入錯誤學號)</label>
+      </div>
+      <div class="col-12 text-right">
+        <input type="radio" class="ml-3" id="id-length-7" name="id-length" value="7">
+        <label for="id-length-7">學號七碼</label>
+        <input type="radio" class="ml-3" id="id-length-9" name="id-length" value="9" checked>
+        <label for="id-length-9">學號九碼</label>
       </div>
     </div>
     <div class="form-row">
@@ -35,7 +42,7 @@
         <input type="number" class="form-control score-input" placeholder="成績" id="score" maxlength="3">
       </div>
     </div>
-    <div class="row mt-3" id="student-score-container">
+    <div class="row mt-3 px-3" id="student-score-container">
       <div class="col-12 d-flex justify-content-around text-center student-score-header">
         <span>學號</span><span>成績</span><span>功能</span>
       </div>

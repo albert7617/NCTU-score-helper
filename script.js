@@ -1,10 +1,43 @@
 $(document).ready(function() {
-  var student = $('#student-id');
-  var score = $('#score');
-  var container = $('#student-score-container');
+  // Capture backspace key prevent 
+  $(document).unbind('keydown').bind('keydown', function (event) {
+    if (event.keyCode === 8) {
+      var doPrevent = true;
+      var types = ["text", "password", "file", "search", "email", "number", "date", "color", "datetime", "datetime-local", "month", "range", "search", "tel", "time", "url", "week"];
+      var d = $(event.srcElement || event.target);
+      var disabled = d.prop("readonly") || d.prop("disabled");
+      if (!disabled) {
+        if (d[0].isContentEditable) {
+          doPrevent = false;
+        } else if (d.is("input")) {
+          var type = d.attr("type");
+          if (type) {
+            type = type.toLowerCase();
+          }
+          if (types.indexOf(type) > -1) {
+            doPrevent = false;
+          }
+        } else if (d.is("textarea")) {
+          doPrevent = false;
+        }
+      }
+      if (doPrevent) {
+        event.preventDefault();
+        return false;
+      }
+    } else if (event.keyCode == 107) {
+      maxScore.attr("checked", !maxScore.attr("checked"));
+      return false;
+    }
+  });
+
+  const student = $('#student-id');
+  const score = $('#score');
+  const container = $('#student-score-container');
+  const maxScore = $('#max-score-100');
 
   student.on('keyup', function(event) {
-    if ($(this).val().length >= parseInt($(this).attr('maxlength'))) {
+    if ($(this).val().length >= parseInt($('input:radio[name="id-length"]:checked').val())) {
       score.focus();
     }
   });
@@ -17,6 +50,9 @@ $(document).ready(function() {
     } else if (event.keyCode == 106) {
       score.val(''); 
       score.focus(); 
+      return false;
+    }  else if (event.keyCode == 107) {
+      maxScore.attr("checked", !maxScore.attr("checked"));
       return false;
     } else if (event.keyCode == 109) {
       if ($('#alert-if-not-exist').prop('checked')) {
@@ -44,6 +80,9 @@ $(document).ready(function() {
     } else if (event.keyCode == 106) {
       score.val(''); 
       score.focus(); 
+      return false;
+    }  else if (event.keyCode == 107) {
+      maxScore.attr("checked", !maxScore.attr("checked"));
       return false;
     } else if (event.keyCode == 109) {
       if ($('#alert-if-not-exist').prop('checked')) {
